@@ -2,7 +2,7 @@
 variable "profile" {
   description = "Account to deploy into"
   type        = string
-  default     = null
+  default     = "personal-aws-account"
 }
 
 variable "region" {
@@ -14,4 +14,5 @@ variable "region" {
 variable "stage" {
   description = "The environment to deploy into"
   type        = string
+  default     = "dev"
 }

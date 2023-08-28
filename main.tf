@@ -11,5 +11,6 @@ module "vpc" {
   tags = {
     Terraform        = "true"
     Stage            = var.stage
+    Account          = data.aws_caller_identity.current.account_id
   }
 }
