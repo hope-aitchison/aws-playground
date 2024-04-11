@@ -2,7 +2,7 @@
 variable "profile" {
   description = "Account to deploy into"
   type        = string
-  default     = "personal-aws-account"
+  default     = "redhat-dev"
 }
 
 variable "region" {
