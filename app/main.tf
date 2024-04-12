@@ -5,7 +5,7 @@ module "server-sg" {
   description = "security group for redhat test server, http ports open"
   vpc_id      = data.aws_vpc.dev.id
 
-ingress_cidr_blocks = ["10.10.0.0/16"]
+  ingress_cidr_blocks = ["10.10.0.0/16"]
 }
 
 module "ec2_instance" {
@@ -24,7 +24,6 @@ module "ec2_instance" {
   user_data_replace_on_change = true
 
   tags = {
-    Terraform   = "true"
     Environment = var.stage
   }
 }
