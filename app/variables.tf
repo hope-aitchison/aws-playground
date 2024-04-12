@@ -16,3 +16,9 @@ variable "stage" {
   type        = string
   default     = "dev"
 }
+
+variable "app-name" {
+  description = "name of the application"
+  type        = string
+  default     = "redhat"
+}
