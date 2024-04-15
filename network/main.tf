@@ -12,5 +12,6 @@ module "vpc" {
     Terraform        = "true"
     Stage            = var.stage
     Account          = data.aws_caller_identity.current.account_id
+    App-name         = var.app-name
   }
 }
