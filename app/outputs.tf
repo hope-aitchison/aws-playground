@@ -5,3 +5,7 @@ output "instance_ip_addr" {
 output "security_group_id" {
   value = module.server-sg.security_group_id
 }
+
+output "ip_secret" {
+  value = jsondecode(data.aws_secretsmanager_secret.remote_ip.secret_string)["cidr_block"]
+}

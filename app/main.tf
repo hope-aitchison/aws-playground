@@ -1,3 +1,7 @@
+resource "aws_secretsmanager_secret" "cidr_block" {
+  name = "remote-access-ip"
+}
+
 module "server-sg" {
   source = "terraform-aws-modules/security-group/aws//modules/http-80"
 
@@ -5,7 +9,15 @@ module "server-sg" {
   description = "security group for redhat test server, http ports open"
   vpc_id      = data.aws_vpc.dev.id
 
-  ingress_cidr_blocks = ["10.10.0.0/16"]
+  # default CIDR block, used for all ingress rules - typically CIDR blocks of the VPC
+  ingress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
+
+  ingress_with_cidr_blocks = [
+    {
+      rule = "ssh-tcp"
+      cidr_blocks = [data.aws_secretsmanager_secret.remote_ip.secret]
+    }
+  ]
 }
 
 module "ec2_instance" {
@@ -27,3 +39,4 @@ module "ec2_instance" {
     Environment = var.stage
   }
 }
+

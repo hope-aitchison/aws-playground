@@ -26,3 +26,7 @@ data "aws_ami" "amazon_linux" {
     values = ["amzn-ami-hvm-*-x86_64-gp2"]
   }
 }
+
+data "aws_secretsmanager_secret" "remote_ip" {
+  name = "remote-access-ip"
+}
