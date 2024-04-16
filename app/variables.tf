@@ -21,4 +21,4 @@ variable "app-name" {
   description = "name of the application"
   type        = string
   default     = "redhat"
-}
+} 

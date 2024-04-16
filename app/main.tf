@@ -15,7 +15,7 @@ module "server-sg" {
   ingress_with_cidr_blocks = [
     {
       rule = "ssh-tcp"
-      cidr_blocks = [data.aws_secretsmanager_secret.remote_ip.secret]
+      cidr_blocks = local.ip_secret
     }
   ]
 }

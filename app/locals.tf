@@ -3,4 +3,6 @@ locals {
     #!/bin/bash
     echo "Hello Terraform!"
   EOT
+
+  ip_secret = data.aws_secretsmanager_secret_version.current.secret_string
 }
