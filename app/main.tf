@@ -14,7 +14,7 @@ module "server-sg" {
 
   ingress_with_cidr_blocks = [
     {
-      rule = "ssh-tcp"
+      rule        = "ssh-tcp"
       cidr_blocks = local.ip_secret
     }
   ]
@@ -31,6 +31,12 @@ module "ec2_instance" {
   monitoring             = true
   vpc_security_group_ids = [module.server-sg.security_group_id]
   subnet_id              = data.aws_subnet.private.id
+
+  create_iam_instance_profile = true
+  iam_role_description        = "IAM role for Redhat EC2"
+  iam_role_policies = {
+    AmazonEC2RoleforSSM = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  }
 
   user_data_base64            = base64encode(local.user_data)
   user_data_replace_on_change = true
