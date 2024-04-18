@@ -3,21 +3,18 @@ resource "aws_secretsmanager_secret" "cidr_block" {
 }
 
 module "server-sg" {
-  source = "terraform-aws-modules/security-group/aws//modules/http-80"
+  source = "terraform-aws-modules/security-group/aws"
 
   name        = "${var.stage}-${var.app-name}-sg"
-  description = "security group for redhat test server, http ports open"
+  description = "security group for redhat test server"
   vpc_id      = data.aws_vpc.dev.id
 
   # default CIDR block, used for all ingress rules - typically CIDR blocks of the VPC
   ingress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
+  ingress_rules       = ["https-443-tcp"]
 
-  ingress_with_cidr_blocks = [
-    {
-      rule        = "ssh-tcp"
-      cidr_blocks = local.ip_secret
-    }
-  ]
+  egress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
+  egress_rules       = ["https-443-tcp"]
 }
 
 module "ec2_instance" {
@@ -38,7 +35,7 @@ module "ec2_instance" {
     AmazonEC2RoleforSSM = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   }
 
-  user_data_base64            = base64encode(local.user_data)
+  user_data_base64            = filebase64("user_data.sh")
   user_data_replace_on_change = true
 
   tags = {
