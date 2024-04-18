@@ -17,7 +17,15 @@ data "aws_subnet" "private" {
   }
 }
 
-data "aws_ami" "amazon_linux" {
+data "aws_subnet" "public" {
+  vpc_id = data.aws_vpc.dev.id
+  filter {
+    name   = "tag:Name"
+    values = ["dev-vpc-public-eu-west-2a"]
+  }
+}
+
+data "aws_ami" "rhel_9" {
   most_recent = true
   owners      = ["amazon"]
 
