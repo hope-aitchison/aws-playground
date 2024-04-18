@@ -22,3 +22,9 @@ variable "app-name" {
   type        = string
   default     = "redhat"
 } 
+
+variable "key-pair" {
+  description = "instance key pair name"
+  type        = string
+  default     = "redhat-development"
+}

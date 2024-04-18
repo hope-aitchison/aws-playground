@@ -13,8 +13,22 @@ module "server-sg" {
   ingress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
   ingress_rules       = ["https-443-tcp"]
 
+  ingress_with_cidr_blocks = [
+    {
+      rule        = "ssh-tcp"
+      cidr_blocks = local.ip_secret
+    },
+  ]
+
   egress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
   egress_rules       = ["https-443-tcp"]
+
+  egress_with_cidr_blocks = [
+    {
+      rule        = "https-443-tcp"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
 }
 
 module "ec2_instance" {
@@ -22,9 +36,9 @@ module "ec2_instance" {
 
   name = "redhat-server"
 
-  ami                    = data.aws_ami.amazon_linux.id
+  ami                    = data.aws_ami.rhel_9.id
   instance_type          = "t2.micro"
-  key_name               = "redhat-development"
+  key_name               = var.key-pair
   monitoring             = true
   vpc_security_group_ids = [module.server-sg.security_group_id]
   subnet_id              = data.aws_subnet.private.id
@@ -43,3 +57,29 @@ module "ec2_instance" {
   }
 }
 
+module "ec2_instance_public" {
+  source = "terraform-aws-modules/ec2-instance/aws"
+
+  name = "redhat-server-public"
+
+  ami                    = data.aws_ami.rhel_9.id
+  instance_type          = "t2.micro"
+  key_name               = var.key-pair
+  monitoring             = true
+  vpc_security_group_ids = [module.server-sg.security_group_id]
+  subnet_id              = data.aws_subnet.public.id
+  # associate_public_ip_address = true
+
+  create_iam_instance_profile = true
+  iam_role_description        = "IAM role for Redhat EC2"
+  iam_role_policies = {
+    AmazonEC2RoleforSSM = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  }
+
+  user_data_base64            = filebase64("user_data.sh")
+  user_data_replace_on_change = true
+
+  tags = {
+    Environment = var.stage
+  }
+}
