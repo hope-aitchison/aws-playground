@@ -57,3 +57,7 @@ data "aws_secretsmanager_secret" "remote_ip" {
 data "aws_secretsmanager_secret_version" "current" {
   secret_id = data.aws_secretsmanager_secret.remote_ip.id
 }
+
+data "aws_security_group" "vpc-endpoints-sg" {
+  name = "${var.stage}-vpc-endpoints*"
+}
