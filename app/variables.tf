@@ -29,7 +29,7 @@ variable "key-pair" {
   default     = "redhat-development"
 }
 
-variable "internet-cidr" {
+variable "internet_cidr" {
   description = "cidr block for all IP range"
   type        = string
   default     = "0.0.0.0/0"
