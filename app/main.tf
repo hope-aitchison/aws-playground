@@ -33,6 +33,7 @@ module "server-sg" {
   ]
 
   egress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
+  egress_rules       = ["https-443-tcp"]
   egress_with_cidr_blocks = [
     {
       rule        = "https-443-tcp"
