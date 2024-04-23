@@ -13,17 +13,42 @@ module "server-sg" {
   ingress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
   ingress_with_source_security_group_id = [
     {
-      rule = "https-443-tcp"
+      rule                     = "https-443-tcp"
       source_security_group_id = data.aws_security_group.vpc-endpoints-sg.id
+    }
+  ]
+  ingress_with_cidr_blocks = [
+    {
+      rule        = "rdp-tcp"
+      cidr_blocks = local.ip_secret
+    },
+    {
+      rule        = "rdp-udp"
+      cidr_blocks = local.ip_secret
+    },
+    {
+      rule        = "http-80-tcp"
+      cidr_blocks = var.internet_cidr
     }
   ]
 
   egress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
-  egress_rules       = ["https-443-tcp"]
   egress_with_cidr_blocks = [
     {
       rule        = "https-443-tcp"
-      cidr_blocks = "0.0.0.0/0"
+      cidr_blocks = var.internet_cidr
+    },
+    {
+      rule        = "http-80-tcp"
+      cidr_blocks = var.internet_cidr
+    },
+    {
+      rule        = "rdp-tcp"
+      cidr_blocks = local.ip_secret
+    },
+    {
+      rule        = "rdp-udp"
+      cidr_blocks = local.ip_secret
     },
   ]
 }
