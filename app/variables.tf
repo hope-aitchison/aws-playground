@@ -21,10 +21,16 @@ variable "app-name" {
   description = "name of the application"
   type        = string
   default     = "redhat"
-} 
+}
 
 variable "key-pair" {
   description = "instance key pair name"
   type        = string
   default     = "redhat-development"
+}
+
+variable "internet_cidr" {
+  description = "cidr block for all IP range"
+  type        = string
+  default     = "0.0.0.0/0"
 }
