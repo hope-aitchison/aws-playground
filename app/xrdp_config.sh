@@ -2,7 +2,7 @@
 
 # Install server with GUI
 yum grouplist
-yum group install "Server with GUI" -y
+yum group install "Server with GUI" -y --nobest
 
 # Install TigerVNC"
 yum install tigervnc-server -y
