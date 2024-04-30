@@ -54,12 +54,12 @@ module "server-sg" {
   ]
 }
 
-module "ec2_instance" {
+module "ec2_instance_rhel" {
   source = "terraform-aws-modules/ec2-instance/aws"
 
-  name = "redhat-server"
+  name = "rhel-9-server"
 
-  ami                    = data.aws_ami.rhel_9.id
+  ami                    = var.rhel_9_ami
   instance_type          = "t2.micro"
   key_name               = var.key-pair
   monitoring             = true
