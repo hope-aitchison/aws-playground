@@ -34,3 +34,9 @@ variable "internet_cidr" {
   type        = string
   default     = "0.0.0.0/0"
 }
+
+variable "rhel_9_ami" {
+  description = "free tier HVM RHEL 9 AMI"
+  type        = string
+  default     = "ami-035cecbff25e0d91e"
+}
