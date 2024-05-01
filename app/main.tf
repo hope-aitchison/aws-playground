@@ -86,7 +86,7 @@ module "ec2_instance_rhel_public" {
   name = "rhel-9-server"
 
   ami                    = var.rhel_9_ami
-  instance_type          = "t2.micro"
+  instance_type          = "m5.large" # more compute required for GUI & xrdp
   key_name               = var.key-pair
   monitoring             = true
   vpc_security_group_ids = [module.server-sg.security_group_id]
@@ -101,6 +101,17 @@ module "ec2_instance_rhel_public" {
 
   user_data_base64            = filebase64("user_data.sh")
   user_data_replace_on_change = true
+
+  root_block_device = [
+    {
+      volume_type = "gp3"
+      throughput  = 200
+      volume_size = 50
+      volume_tags = {
+        Name = "root"
+      }
+    },
+  ]
 
   tags = {
     Environment = var.stage
