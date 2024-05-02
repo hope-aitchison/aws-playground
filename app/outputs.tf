@@ -1,7 +1,3 @@
-output "instance_ip_addr_private" {
-  value = module.ec2_instance_rhel.private_ip
-}
-
 output "public_instance_ip_addr_private" {
   value = module.ec2_instance_rhel_public.private_ip
 }

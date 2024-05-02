@@ -54,32 +54,6 @@ module "server-sg" {
   ]
 }
 
-module "ec2_instance_rhel" {
-  source = "terraform-aws-modules/ec2-instance/aws"
-
-  name = "rhel-9-server"
-
-  ami                    = var.rhel_9_ami
-  instance_type          = "t2.micro"
-  key_name               = var.key-pair
-  monitoring             = true
-  vpc_security_group_ids = [module.server-sg.security_group_id]
-  subnet_id              = data.aws_subnet.private.id
-
-  create_iam_instance_profile = true
-  iam_role_description        = "IAM role for Redhat EC2"
-  iam_role_policies = {
-    AmazonEC2RoleforSSM = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-  }
-
-  user_data_base64            = filebase64("user_data.sh")
-  user_data_replace_on_change = true
-
-  tags = {
-    Environment = var.stage
-  }
-}
-
 module "ec2_instance_rhel_public" {
   source = "terraform-aws-modules/ec2-instance/aws"
 
