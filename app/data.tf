@@ -9,13 +9,13 @@ data "aws_vpc" "dev" {
   }
 }
 
-data "aws_subnet" "private" {
-  vpc_id = data.aws_vpc.dev.id
-  filter {
-    name   = "tag:Name"
-    values = ["dev-vpc-private-eu-west-2a"]
-  }
-}
+// data "aws_subnet" "private" {
+//   vpc_id = data.aws_vpc.dev.id
+//   filter {
+//     name   = "tag:Name"
+//     values = ["dev-vpc-private-eu-west-2a"]
+//   }
+// }
 
 data "aws_subnet" "public" {
   vpc_id = data.aws_vpc.dev.id
