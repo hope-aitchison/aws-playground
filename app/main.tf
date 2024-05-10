@@ -11,12 +11,6 @@ module "server-sg" {
 
   # default CIDR block, used for all ingress rules - typically CIDR blocks of the VPC
   ingress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
-  ingress_with_source_security_group_id = [
-    {
-      rule                     = "https-443-tcp"
-      source_security_group_id = data.aws_security_group.vpc-endpoints-sg.id
-    }
-  ]
   ingress_with_cidr_blocks = [
     {
       rule        = "rdp-tcp"
@@ -27,9 +21,9 @@ module "server-sg" {
       cidr_blocks = local.ip_secret
     },
     {
-      rule        = "http-80-tcp"
-      cidr_blocks = var.internet_cidr
-    }
+      rule        = "https-443-tcp"
+      cidr_blocks = local.ip_secret
+    },
   ]
 
   egress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
@@ -59,7 +53,7 @@ module "ec2_instance_rhel_public" {
 
   name = "rhel-9-server"
 
-  ami                    = var.rhel_9_ami
+  ami                    = var.custom_rhel_9_ami
   instance_type          = "m5.large" # more compute required for GUI & xrdp
   key_name               = var.key-pair
   monitoring             = true

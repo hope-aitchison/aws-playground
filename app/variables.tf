@@ -35,8 +35,8 @@ variable "internet_cidr" {
   default     = "0.0.0.0/0"
 }
 
-variable "rhel_9_ami" {
-  description = "free tier HVM RHEL 9 AMI"
+variable "custom_rhel_9_ami" {
+  description = "custom built AMI with GUI installed and RDP configured"
   type        = string
-  default     = "ami-035cecbff25e0d91e"
+  default     = "ami-058c52f9221bd6901"
 }
