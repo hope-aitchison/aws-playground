@@ -1,7 +1,3 @@
-// resource "aws_secretsmanager_secret" "cidr_block" {
-//   name = "remote-access-ip"
-// }
-
 module "server-sg" {
   source = "terraform-aws-modules/security-group/aws"
 
@@ -10,43 +6,10 @@ module "server-sg" {
   vpc_id      = data.aws_vpc.dev.id
 
   # default CIDR block, used for all ingress rules - typically CIDR blocks of the VPC
-//   ingress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
-//   ingress_with_cidr_blocks = [
-//     {
-//       rule        = "rdp-tcp"
-//       cidr_blocks = local.ip_secret
-//     },
-//     {
-//       rule        = "rdp-udp"
-//       cidr_blocks = local.ip_secret
-//     },
-//     {
-//       rule        = "https-443-tcp"
-//       cidr_blocks = local.ip_secret
-//     },
-//   ]
+  ingress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
 
-//   egress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
+  egress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
   egress_rules       = ["https-443-tcp", "http-80-tcp"]
-//   egress_rules       = ["http-80-tcp"]
-//   egress_with_cidr_blocks = [
-//     {
-//       rule        = "https-443-tcp"
-//       cidr_blocks = var.internet_cidr
-//     },
-//     {
-//       rule        = "http-80-tcp"
-//       cidr_blocks = var.internet_cidr
-//     },
-//     {
-//       rule        = "rdp-tcp"
-//       cidr_blocks = local.ip_secret
-//     },
-//     {
-//       rule        = "rdp-udp"
-//       cidr_blocks = local.ip_secret
-//     },
-//   ]
 }
 
 module "ec2_instance_rhel_public" {
@@ -85,4 +48,19 @@ module "ec2_instance_rhel_public" {
   tags = {
     Environment = var.stage
   }
+}
+
+resource "aws_ebs_volume" "sdf" {
+    availability_zone = "eu-west-2a"
+    size              = 10
+
+    tags = {
+        Environment = var.stage
+    }
+}
+
+resource "aws_volume_attachment" "sdf_att" {
+    device_name = "/dev/sdf"
+    volume_id   = aws_ebs_volume.sdf.id
+    instance_id = module.ec2_instance_rhel_public.id
 }
