@@ -9,3 +9,7 @@ output "public_instance_ip_addr_public" {
 output "security_group_id" {
   value = module.server-sg.security_group_id
 }
+
+output "instance_id" {
+    value = module.ec2_instance_rhel_public.instance_id
+}

@@ -25,14 +25,14 @@ data "aws_subnet" "public" {
   }
 }
 
-data "aws_secretsmanager_secret" "remote_ip" {
-  name = "remote-access-ip"
-}
+// data "aws_secretsmanager_secret" "remote_ip" {
+//   name = "remote-access-ip"
+// }
 
-data "aws_secretsmanager_secret_version" "current" {
-  secret_id = data.aws_secretsmanager_secret.remote_ip.id
-}
+// data "aws_secretsmanager_secret_version" "current" {
+//   secret_id = data.aws_secretsmanager_secret.remote_ip.id
+// }
 
-data "aws_security_group" "vpc-endpoints-sg" {
-  name = "${var.stage}-vpc-endpoints*"
-}
+// data "aws_security_group" "vpc-endpoints-sg" {
+//   name = "${var.stage}-vpc-endpoints*"
+// }
