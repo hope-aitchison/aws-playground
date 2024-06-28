@@ -1,4 +1,4 @@
-name: Build aws playground
+name: Destroy aws playground
 
 on:
   workflow_dispatch: # manual trigger
