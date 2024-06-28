@@ -1,7 +1,7 @@
 name: Build aws playground
 
 on:
-  workflow_disptach: # manual trigger
+  workflow_dispatch: # manual trigger
 
 jobs:
   build:
