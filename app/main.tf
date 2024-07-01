@@ -9,7 +9,7 @@ module "server-sg" {
   ingress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
 
   // egress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
-  egress_cidr_blocks = var.internet_cidr
+  egress_cidr_blocks = [var.internet_cidr]
   egress_rules       = ["https-443-tcp", "http-80-tcp"]
 }
 
