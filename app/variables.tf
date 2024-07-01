@@ -1,10 +1,4 @@
 ### General Variables ###
-variable "profile" {
-  description = "Account to deploy into"
-  type        = string
-  default     = "redhat-dev"
-}
-
 variable "region" {
   description = "AWS region to deploy into"
   type        = string
