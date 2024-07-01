@@ -2,9 +2,13 @@ name: Run plan for aws playground
 
 on:
   workflow_dispatch: # manual trigger
+    inputs:
+      target:
+        description: 'Target infrastructure plan (app, network, backend)'
+        required: true
 
 jobs:
-  build:
+  plan:
     runs-on: ubuntu-latest
   
     steps:
@@ -20,16 +24,43 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform init
+        run: |
+          case ${{ github.event.inputs.target }} in
+            app) cd app ;;
+            network) cd network ;;
+            backend) cd backend ;;
+            *) echo "Invalid target: ${{ github.event.inputs.target }}"; exit 1 ;;
+          esac
+          terraform init
       
       - name: Terraform plan
         env: 
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform plan -auto-approve
+        run: |
+          case ${{ github.event.inputs.target }} in
+            app) cd app ;;
+            network) cd network ;;
+            backend) cd backend ;;
+            *) echo "Invalid target: ${{ github.event.inputs.target }}"; exit 1 ;;
+          esac
+          terraform plan -out=tfplan
 
       - name: Upload plan artifact
-        uses: actions/checkout@v4
+        uses: actions/upload-artifact@v4
         with:
           name: tfplan
           path: tfplan
+
+      - name: Show terraform plan
+        env: 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          case ${{ github.event.inputs.target }} in
+            app) cd app ;;
+            network) cd network ;;
+            backend) cd backend ;;
+            *) echo "Invalid target: ${{ github.event.inputs.target }}"; exit 1 ;;
+          esac
+          terraform show tfplan

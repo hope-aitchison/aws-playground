@@ -11,5 +11,5 @@ output "security_group_id" {
 }
 
 output "instance_id" {
-    value = module.ec2_instance_rhel_public.instance_id
+    value = module.ec2_instance_rhel_public.id
 }

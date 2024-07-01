@@ -2,9 +2,13 @@ name: Destroy aws playground
 
 on:
   workflow_dispatch: # manual trigger
+    inputs:
+      target:
+        description: 'Target infrastructure to be destroyed (app, network, backend)'
+        required: true
 
 jobs:
-  build:
+  destroy:
     runs-on: ubuntu-latest
   
     steps:
@@ -20,10 +24,25 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform init
+        run: |
+          case ${{ github.event.inputs.target }} in
+            app) cd app ;;
+            network) cd network ;;
+            backend) cd backend ;;
+            *) echo "Invalid target: ${{ github.event.inputs.target }}"; exit 1 ;;
+          esac
+          terraform init
       
       - name: Terraform destroy
+        if: github.event.inputs.target != ''
         env: 
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform destroy -auto-approve
+        run: |
+          case ${{ github.event.inputs.target }} in
+            app) cd app ;;
+            network) cd network ;;
+            backend) cd backend ;;
+            *) echo "Invalid target: ${{ github.event.inputs.target }}"; exit 1 ;;
+          esac          
+          terraform destroy -auto-approve
