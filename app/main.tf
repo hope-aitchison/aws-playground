@@ -21,7 +21,6 @@ module "ec2_instance_rhel_public" {
 
   ami                    = "ami-035cecbff25e0d91e" # free tier RHEL9
   instance_type          = "t3.micro" 
-  // key_name               = var.key-pair
   monitoring             = true
   vpc_security_group_ids = [module.server-sg.security_group_id]
   subnet_id              = data.aws_subnet.public.id
