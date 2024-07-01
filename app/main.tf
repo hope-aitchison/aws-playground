@@ -6,9 +6,11 @@ module "server-sg" {
   vpc_id      = data.aws_vpc.dev.id
 
   # default CIDR block, used for all ingress rules - typically CIDR blocks of the VPC
-  ingress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
+  // ingress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
+  // ingress_cidr_blocks = [var.internet_cidr]
+  // ingress_rules       = ["ssh-tcp"]
 
-  egress_cidr_blocks = [var.internet_cidr]
+  egress_cidr_blocks = [data.aws_vpc.dev.cidr_block]
   egress_rules       = ["https-443-tcp", "http-80-tcp"]
 }
 
@@ -19,7 +21,6 @@ module "ec2_instance_rhel_public" {
 
   ami                    = "ami-035cecbff25e0d91e" # free tier RHEL9
   instance_type          = "t3.micro" 
-//   key_name               = var.key-pair
   monitoring             = true
   vpc_security_group_ids = [module.server-sg.security_group_id]
   subnet_id              = data.aws_subnet.public.id
